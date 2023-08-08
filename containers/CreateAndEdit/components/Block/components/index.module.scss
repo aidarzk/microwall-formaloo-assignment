@@ -1,0 +1,9 @@
+@import "@/shared/styles/variables.module.scss";
+
+.takeInfoBox {
+    text-align: left;
+    padding: 8px;
+    border: 1px dashed $secondary;
+    border-radius: 12px;
+    min-width: 300px;
+}

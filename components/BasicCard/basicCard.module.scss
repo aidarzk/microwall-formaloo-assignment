@@ -1,0 +1,24 @@
+
+@import "@/shared/styles/variables.module.scss";
+
+.card {
+  display: flex;
+  padding: 2.5rem;
+  box-shadow: $shadow_1;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  border-radius: 12px;
+   margin-bottom: 16px;
+
+  & > *:not(:first-child) {
+    margin-top: 1rem;
+  }
+}
+
+ .description {
+    opacity: 0.6;
+ }
+
+ 

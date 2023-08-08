@@ -1,0 +1,23 @@
+
+@import "@/shared/styles/variables.module.scss";
+
+.container {
+  display: flex !important;
+  padding: 16px;
+  box-shadow: $shadow_2;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  border-radius: 12px;
+  margin: 16px auto;
+  padding: 16px;
+  gap: 16px;
+ 
+  & > *:not(:first-child) {
+    margin-top: 1rem;
+  }
+}
+
+ 
+ 
