@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import { blocksSlice } from "./features/blocksSlice";
+import { wallsSlice } from "./features/wallsSlice";
 
 const persistConfig = {
   key: "root",
@@ -11,7 +11,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  [blocksSlice.name]: blocksSlice.reducer,
+  [wallsSlice.name]: wallsSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

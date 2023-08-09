@@ -5,6 +5,7 @@ import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
 
 interface InputValuesModel {
   title: string;
@@ -12,13 +13,12 @@ interface InputValuesModel {
   label: string;
 }
 
-interface PhoneNumberEditorBlockProps {
+interface InputEditorBlockProps {
   onUpdateBlock: (args: InputValuesModel) => void;
+  data?: EditorDataModel;
 }
 
-export const PhoneNumberEditorBlock = ({
-  onUpdateBlock,
-}: PhoneNumberEditorBlockProps) => {
+export const InputEditorBlock = ({ onUpdateBlock }: InputEditorBlockProps) => {
   const [values, setValues] = useState<InputValuesModel>({
     title: "",
     label: "",

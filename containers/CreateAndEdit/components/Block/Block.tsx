@@ -1,15 +1,12 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { blockTypes } from "@/shared/constants/blockTypes";
+import { BlockModel, blockTypes } from "@/shared/constants/blockTypes";
 import dynamic from "next/dynamic";
+import { BlockBox } from "@/components/BlockBox/BlockBox";
+import { useAppDispatch } from "@/redux/hooks";
+import {
+  editBlockEditorData,
+  removeBlockById,
+} from "@/redux/features/wallsSlice";
 
 const TextEditorBlock = dynamic(() =>
   import("./components").then((res) => res.TextEditorBlock)
@@ -43,35 +40,98 @@ const SliderEditorBlock = dynamic(() =>
   import("./components").then((res) => res.SliderEditorBlock)
 );
 
-// const CalendarEditorBlock = dynamic(() =>
-//   import("./components").then((res) => res.CalendarEditorBlock)
-// );
-// const CalendarEditorBlock = dynamic(() =>
-//   import("./components").then((res) => res.CalendarEditorBlock)
-// );
+const InputEditorBlock = dynamic(() =>
+  import("./components").then((res) => res.InputEditorBlock)
+);
 
 interface BlockProps {
-  block: any;
+  block: BlockModel;
+  blockId: string;
+  wallId: string;
 }
 
-const getEditorComponent = {
-  [blockTypes.text]: <TextEditorBlock />,
-  [blockTypes.checkbox]: <CheckboxEditorBlock />,
-  [blockTypes.calendar]: <CalendarEditorBlock />,
-  [blockTypes.dropDown]: <DropDownEditorBlock />,
-  [blockTypes.file]: <FileEditorBlock />,
-  [blockTypes.image]: <ImageEditorBlock />,
-  [blockTypes.phoneNumber]: <PhoneNumberEditorBlock />,
-  [blockTypes.slider]: <SliderEditorBlock />,
-  // [blockTypes.phoneNumber]: <PhoneNumberEditorBlock />,
-  // [blockTypes.phoneNumber]: <PhoneNumberEditorBlock />,
-  // [blockTypes.phoneNumber]: <PhoneNumberEditorBlock />,
-};
+export const Block = ({ block, blockId, wallId }: BlockProps) => {
+  const dispatch = useAppDispatch();
 
-export const Block = ({ block }: BlockProps) => {
+  const handleDeleteBlock = () => {
+    dispatch(
+      removeBlockById({
+        wallId,
+        blockId,
+      })
+    );
+  };
+
+  function handleUpdateBlock<T>(values: T) {
+    dispatch(
+      editBlockEditorData({
+        wallId,
+        blockId,
+        data: values,
+      })
+    );
+  }
+
+  const getEditorComponent = {
+    [blockTypes.text]: (
+      <TextEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.checkbox]: (
+      <CheckboxEditorBlock
+        onUpdateBlock={handleUpdateBlock}
+        data={block.editorData}
+      />
+    ),
+    [blockTypes.calendar]: (
+      <CalendarEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.dropDown]: (
+      <DropDownEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.file]: (
+      <FileEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.image]: (
+      <ImageEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.phoneNumber]: (
+      <PhoneNumberEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.slider]: (
+      <SliderEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+    [blockTypes.input]: (
+      <InputEditorBlock
+        data={block.editorData}
+        onUpdateBlock={handleUpdateBlock}
+      />
+    ),
+  };
+
   return (
-    <Box>
-      <Box>{getEditorComponent[block.type]}</Box>
-    </Box>
+    <BlockBox onDelete={handleDeleteBlock}>
+      {getEditorComponent[block.type]}
+    </BlockBox>
   );
 };

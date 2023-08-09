@@ -6,7 +6,7 @@ export { FileEditorBlock } from "./FileEditorBlock";
 export { ImageEditorBlock } from "./ImageEditorBlock";
 export { PhoneNumberEditorBlock } from "./PhoneNumberEditorBlock";
 export { SliderEditorBlock } from "./SliderEditorBlock";
-// export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
+export { InputEditorBlock } from "./InputEditorBlock";
 // export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
 // export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
 // export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";

@@ -1,8 +1,6 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { Textarea } from "@/components/TextArea/TextArea";
 import { TextField } from "@/components/TextField/TextField";
-import BlockBox from "@/components/BlockBox/BlockBox";
 import {
   IconButton,
   InputLabel,
@@ -11,53 +9,48 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
-import Checkbox from "@mui/material/Checkbox";
-import { IconCheck, IconPlus, IconX } from "@tabler/icons-react";
+import { IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
-interface DropDownEditorBlockProps {
-  onDelete?: any;
+interface DropDownValuesModel {
+  title: string;
+  options: string[];
 }
 
-export const DropDownEditorBlock = ({ onDelete }: DropDownEditorBlockProps) => {
-  const [information, setInformation] = useState({
+interface DropDownEditorBlockProps {
+  onUpdateBlock: (args: DropDownValuesModel) => void;
+  data?: EditorDataModel;
+}
+
+export const DropDownEditorBlock = ({
+  onUpdateBlock,
+  data,
+}: DropDownEditorBlockProps) => {
+  const [values, setValues] = useState<DropDownValuesModel>({
     title: "",
     options: ["option1"],
   });
 
-  const { title, options } = information;
+  const { title, options } = values;
+
+  const debouncedValue = useDebounce<DropDownValuesModel>(values, 2000);
 
   const handleChangeTitle = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
       title: e?.target.value,
     });
   };
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setInformation({
-      ...information,
-      title: e?.target.value,
-    });
-  };
-  console.log({ title });
 
   const handleAddOption = () => {
-    setInformation({
-      ...information,
-      options: [
-        ...information.options,
-        `option ${information.options.length + 1}`,
-      ],
+    setValues({
+      ...values,
+      options: [...values.options, `option ${values.options.length + 1}`],
     });
   };
 
@@ -65,57 +58,59 @@ export const DropDownEditorBlock = ({ onDelete }: DropDownEditorBlockProps) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
+    const optionsCopy = [...options];
     if (index !== -1) {
-      options[index] = e?.target.value;
+      optionsCopy[index] = e?.target.value;
     }
 
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
+      options: optionsCopy,
     });
   };
 
   const handleDeleteOption = (index: number) => {
+    const optionsCopy = [...options];
+
     if (index !== -1) {
-      options.splice(index, 1);
+      optionsCopy.splice(index, 1);
     }
 
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
+      options: optionsCopy,
     });
   };
+
+  useEffect(() => {
+    if (data?.options?.length && data?.options?.length > 0) {
+      setValues({
+        ...values,
+        options: data?.options,
+      });
+    }
+  }, [data?.options]);
+
+  useEffect(() => {
+    onUpdateBlock(values);
+  }, [debouncedValue]);
 
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
-    console.log("first", event.target.value);
     setSelectedOption(event.target.value as string);
   };
 
-  const [age, setAge] = useState("");
-
-  const handleChangex = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
-  console.log({ selectedOption });
   return (
-    <BlockBox onDelete={onDelete}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "start",
-        }}
-      >
+    <>
+      <Box className={classes.container}>
         <Typography mb={1}>{title}</Typography>
 
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">{title}</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={selectedOption}
-            label={title}
             onChange={handleChangeSelect}
           >
             {options.map((opt) => (
@@ -131,12 +126,12 @@ export const DropDownEditorBlock = ({ onDelete }: DropDownEditorBlockProps) => {
         <Typography variant="body2" mb={1}>
           please provide required information:
         </Typography>
-        <TextField onChange={handleChangeTitle} label="title" required />
+        <TextField onChange={handleChangeTitle} label="title" />
 
         <Box mt={1}>
           <Typography variant="caption">options</Typography>
-          {information.options.map((opt, index) => (
-            <Box key={index} display="flex">
+          {options.map((opt, index) => (
+            <Box key={index} className={classes.takeOptionsBox}>
               <TextField
                 value={opt}
                 onChange={(e) => handleEditOption(e, index)}
@@ -156,6 +151,6 @@ export const DropDownEditorBlock = ({ onDelete }: DropDownEditorBlockProps) => {
           </IconButton>
         </Box>
       </Box>
-    </BlockBox>
+    </>
   );
 };

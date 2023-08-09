@@ -1,9 +1,13 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Block } from "../Block/Block";
+import { reorderBlocks } from "@/redux/features/wallsSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
-export const DragableBlocks = ({ blocks, setBlocks }: any) => {
+export const DragableBlocks = ({ blocks, wallId }: any) => {
+  const dispatch = useAppDispatch();
+
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -21,8 +25,14 @@ export const DragableBlocks = ({ blocks, setBlocks }: any) => {
     newItems.forEach((element) => {
       newBlocks[element] = blocks[element];
     });
-    setBlocks(newBlocks);
+
     console.log({ newBlocks });
+    dispatch(
+      reorderBlocks({
+        wallId,
+        blocks: newBlocks,
+      })
+    );
   };
 
   return (
@@ -30,20 +40,30 @@ export const DragableBlocks = ({ blocks, setBlocks }: any) => {
       <Droppable droppableId="droppable">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {Object.keys(blocks)?.map((blockId, index) => (
-              <Draggable key={blockId} draggableId={blockId} index={index}>
-                {(provided, snapshot) => (
-                  <Box
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    key={blockId}
-                  >
-                    <Block block={blocks[blockId]} />
-                  </Box>
-                )}
-              </Draggable>
-            ))}
+            {blocks && Object.keys(blocks)?.length > 0 ? (
+              Object.keys(blocks)?.map((blockId, index) => (
+                <Draggable key={blockId} draggableId={blockId} index={index}>
+                  {(provided, snapshot) => (
+                    <Box
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      key={blockId}
+                    >
+                      <Block
+                        blockId={blockId}
+                        block={blocks[blockId]}
+                        wallId={wallId}
+                      />
+                    </Box>
+                  )}
+                </Draggable>
+              ))
+            ) : (
+              <Typography>
+                It is so empty here please add some blocks
+              </Typography>
+            )}
           </div>
         )}
       </Droppable>

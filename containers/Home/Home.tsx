@@ -16,10 +16,12 @@ export const Home = () => {
           description="you can create and edit forms."
         />
       </Link>
-      <BasicCard
-        title="Viewer"
-        description="you can preview and submit created forms."
-      />
+      <Link href={routes.viewer}>
+        <BasicCard
+          title="Viewer"
+          description="you can preview and submit created forms."
+        />
+      </Link>
     </Container>
   );
 };

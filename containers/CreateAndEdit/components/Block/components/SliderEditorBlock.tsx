@@ -1,44 +1,80 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
-import BlockBox from "@/components/BlockBox/BlockBox";
-import { Typography } from "@mui/material";
-import Slider from "@/components/Slider/Slider";
+import { Slider, Typography } from "@mui/material";
 import classes from "./index.module.scss";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
+interface SliderValuesModel {
+  title: string;
+  defaultValue: number;
+  min: number;
+  max: number;
+}
 interface SliderEditorBlockProps {
-  onDelete?: any;
+  onUpdateBlock: (args: SliderValuesModel) => void;
+  data?: EditorDataModel;
 }
 
-export const SliderEditorBlock = ({ onDelete }: SliderEditorBlockProps) => {
-  const [title, setTitle] = useState("");
+export const SliderEditorBlock = ({
+  onUpdateBlock,
+}: SliderEditorBlockProps) => {
+  const [values, setValues] = useState<SliderValuesModel>({
+    title: "",
+    max: 100,
+    min: 0,
+    defaultValue: 50,
+  });
+
+  const { title, defaultValue, max, min } = values;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setTitle(e?.target.value);
+    setValues({
+      ...values,
+      [e.target.id]: e?.target.value,
+    });
   };
-  console.log({ title });
+
+  const debouncedValue = useDebounce<SliderValuesModel>(values, 2000);
+
+  useEffect(() => {
+    onUpdateBlock(values);
+  }, [debouncedValue]);
+
   return (
-    <BlockBox onDelete={onDelete}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "start",
-        }}
-      >
+    <>
+      <Box className={classes.container}>
         <Typography mb={1}>{title}</Typography>
-        <Slider />
+        <Slider defaultValue={defaultValue} min={min} max={max} />
       </Box>
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
-          please provide required information:
+          please provide information:
         </Typography>
-        <TextField onChange={handleChange} label="title" required />
+        <TextField
+          sx={{ mb: 1 }}
+          onChange={handleChange}
+          label="title"
+          id="title"
+        />
+        <TextField
+          sx={{ mb: 1 }}
+          onChange={handleChange}
+          label="defaultValue"
+          id="defaultValue"
+        />
+        <TextField
+          sx={{ mb: 1 }}
+          onChange={handleChange}
+          label="min"
+          id="min"
+        />
+        <TextField onChange={handleChange} label="max" id="max" />
       </Box>
-    </BlockBox>
+    </>
   );
 };

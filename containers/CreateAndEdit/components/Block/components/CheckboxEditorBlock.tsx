@@ -1,8 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Textarea } from "@/components/TextArea/TextArea";
 import { TextField } from "@/components/TextField/TextField";
-import BlockBox from "@/components/BlockBox/BlockBox";
 import { IconButton, Typography } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -12,45 +11,44 @@ import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
 import { IconCheck, IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
 
+interface CheckboxValuesModel {
+  title: string;
+  options: string[];
+}
 interface CheckboxEditorBlockProps {
-  onDelete?: any;
+  onUpdateBlock: (args: CheckboxValuesModel) => void;
+  data?: EditorDataModel;
 }
 
-export const CheckboxEditorBlock = ({ onDelete }: CheckboxEditorBlockProps) => {
-  const [information, setInformation] = useState({
+export const CheckboxEditorBlock = ({
+  onUpdateBlock,
+  data,
+}: CheckboxEditorBlockProps) => {
+  const [values, setValues] = useState<CheckboxValuesModel>({
     title: "",
-    options: ["option1"],
+    options: [],
   });
 
-  const { title, options } = information;
+  const { title, options } = values;
+
+  const debouncedValue = useDebounce<CheckboxValuesModel>(values, 2000);
 
   const handleChangeTitle = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
       title: e?.target.value,
     });
   };
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setInformation({
-      ...information,
-      title: e?.target.value,
-    });
-  };
-  console.log({ title });
 
   const handleAddOption = () => {
-    setInformation({
-      ...information,
-      options: [
-        ...information.options,
-        `option ${information.options.length + 1}`,
-      ],
+    setValues({
+      ...values,
+      options: [...values.options, `option ${values.options.length + 1}`],
     });
   };
 
@@ -58,51 +56,55 @@ export const CheckboxEditorBlock = ({ onDelete }: CheckboxEditorBlockProps) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
+    const optionsCopy = [...options];
     if (index !== -1) {
-      options[index] = e?.target.value;
+      optionsCopy[index] = e?.target.value;
     }
 
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
+      options: optionsCopy,
     });
   };
 
   const handleDeleteOption = (index: number) => {
+    const optionsCopy = [...options];
+
     if (index !== -1) {
-      options.splice(index, 1);
+      optionsCopy.splice(index, 1);
     }
 
-    setInformation({
-      ...information,
+    setValues({
+      ...values,
+      options: optionsCopy,
     });
   };
+
+  useEffect(() => {
+    if (data?.options?.length && data?.options?.length > 0) {
+      setValues({
+        ...values,
+        options: data?.options,
+      });
+    }
+  }, [data?.options]);
+
+  useEffect(() => {
+    onUpdateBlock(values);
+  }, [debouncedValue]);
+
   return (
-    <BlockBox onDelete={onDelete}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "start",
-        }}
-      >
+    <>
+      <Box className={classes.container}>
         <Typography mb={1}>{title}</Typography>
-        <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-          <FormLabel component="legend">{information.title}</FormLabel>
+        <FormControl sx={{ m: 1 }} component="fieldset" variant="standard">
           <FormGroup>
-            {information.options.map((opt) => (
-              <>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      // checked={gilad}
-                      // onChange={handleChange}
-                      name="gilad"
-                    />
-                  }
-                  label={opt}
-                />
-              </>
+            {options.map((opt) => (
+              <FormControlLabel
+                key={opt}
+                control={<Checkbox name={`${opt}`} />}
+                label={opt}
+              />
             ))}
           </FormGroup>
         </FormControl>
@@ -112,12 +114,12 @@ export const CheckboxEditorBlock = ({ onDelete }: CheckboxEditorBlockProps) => {
         <Typography variant="body2" mb={1}>
           please provide required information:
         </Typography>
-        <TextField onChange={handleChangeTitle} label="title" required />
+        <TextField onChange={handleChangeTitle} label="title" />
 
         <Box mt={1}>
           <Typography variant="caption">options</Typography>
-          {information.options.map((opt, index) => (
-            <Box key={index} display="flex">
+          {options.map((opt, index) => (
+            <Box key={index} className={classes.takeOptionsBox}>
               <TextField
                 value={opt}
                 onChange={(e) => handleEditOption(e, index)}
@@ -137,6 +139,6 @@ export const CheckboxEditorBlock = ({ onDelete }: CheckboxEditorBlockProps) => {
           </IconButton>
         </Box>
       </Box>
-    </BlockBox>
+    </>
   );
 };

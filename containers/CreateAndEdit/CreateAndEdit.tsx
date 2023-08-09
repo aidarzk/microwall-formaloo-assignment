@@ -1,5 +1,6 @@
+"use client";
 import { useState } from "react";
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import BasicCard from "@/components/BasicCard/BasicCard";
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -11,45 +12,65 @@ import { DragableBlocks } from "./components/DragableBlocks/DragableBlocks";
 
 import classes from "./createAndEdit.module.scss";
 import { TextField } from "@/components/TextField/TextField";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addBlockToWall, wallState } from "@/redux/features/wallsSlice";
+import { useParams, useRouter } from "next/navigation";
+import { routes } from "@/shared/constants/routes";
 
 const AddBlockDrawer = dynamic(() =>
   import("./components").then((res) => res.AddBlockDrawer)
 );
 
 export const CreateAndEdit = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const params = useParams();
 
-  const [blocks, setBlocks] = useState({
-    [`${blockTypes.text}-0`]: blockTypesWithDetails[blockTypes.text],
-  });
+  const router = useRouter();
 
-  const blocksKeys = Object.keys(blocks);
+  const wallId = (params?.slug as string) || "";
 
-  const handleAddBlock = (block: any) => {
-    const uniqueId = `${block.type}-${blocksKeys.length}`;
-    setBlocks({
-      [uniqueId]: block,
-      ...blocks,
-    });
-  };
+  const dispatch = useAppDispatch();
+
+  const blocks = useAppSelector(wallState)[wallId]?.blocks;
+
+  const wallName = useAppSelector(wallState)[wallId]?.wallName;
+
+  // console.log({ wallId });
   console.log({ blocks });
 
-  const getBlockComponent = (id: any) => {};
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleAddBlock = (block: any) => {
+    const blocksKeys = blocks ? Object.keys(blocks) : [];
+
+    const uniqueId = `${block.type}-${blocksKeys.length}`;
+    dispatch(
+      addBlockToWall({
+        wallId,
+        block: { [uniqueId]: block },
+      })
+    );
+  };
+  console.log({ blocks });
 
   return (
     <>
       <Container>
         <BasicCard>
           <Box className={classes.header}>
-            <TextField label="form title" />
-            <Button variant="contained" color="secondary">
+            <Typography variant="h3">{wallName}</Typography>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => router.push(`${routes.viewer}/${wallId}`)}
+            >
               preview
             </Button>
           </Box>
         </BasicCard>
 
         <BasicCard>
-          <DragableBlocks blocks={blocks} setBlocks={setBlocks} />
+          <DragableBlocks blocks={blocks} wallId={wallId} />
         </BasicCard>
 
         <Button

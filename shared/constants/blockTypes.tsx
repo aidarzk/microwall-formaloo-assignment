@@ -1,10 +1,12 @@
-import { Textarea } from "@/components/TextArea/TextArea";
+import { ReactNode } from "react";
+
 import {
   IconAdjustmentsHorizontal,
   IconAlignBoxLeftMiddle,
   IconCalendarEvent,
   IconCheckbox,
   IconFileUpload,
+  IconInputSearch,
   IconPhoneCalling,
   IconPhotoPlus,
   IconSelect,
@@ -13,6 +15,7 @@ import {
 
 export const blockTypes = {
   text: "text",
+  input: "input",
   image: "image",
   calendar: "calendar",
   phoneNumber: "phoneNumber",
@@ -23,78 +26,86 @@ export const blockTypes = {
   markup: "markup",
 };
 
-export const blockTypesWithDetails = {
+export interface EditorDataModel {
+  title?: string;
+  defaultValue?: string;
+  min?: string | number;
+  max?: string | number;
+  value: string | number;
+  options: [];
+  label?: string;
+}
+
+export interface BlockModel {
+  type: string;
+  id: number | string;
+  title: string;
+  icon: ReactNode;
+  editorData?: EditorDataModel;
+  viewerData?: {};
+}
+
+export const blockTypesWithDetails: {
+  [key: string]: BlockModel;
+} = {
   [blockTypes.text]: {
     type: blockTypes.text,
     id: 0,
     title: "Text",
     icon: <IconAlignBoxLeftMiddle />,
-    requiredInformation: [],
   },
   [blockTypes.checkbox]: {
     type: blockTypes.checkbox,
     id: 1,
     title: "Checkbox",
     icon: <IconCheckbox />,
-    requiredInformation: [],
   },
   [blockTypes.calendar]: {
     type: blockTypes.calendar,
     id: 2,
     title: "Calendar",
     icon: <IconCalendarEvent />,
-    requiredInformation: [],
   },
   [blockTypes.dropDown]: {
     type: blockTypes.dropDown,
     id: 3,
     title: "DropDown",
     icon: <IconSelect />,
-    requiredInformation: [],
   },
   [blockTypes.file]: {
     type: blockTypes.file,
     id: 4,
     title: "File",
     icon: <IconFileUpload />,
-    requiredInformation: [],
   },
   [blockTypes.image]: {
     type: blockTypes.image,
     id: 5,
     title: "Image",
     icon: <IconPhotoPlus />,
-    requiredInformation: [],
   },
   [blockTypes.markup]: {
     type: blockTypes.markup,
     id: 6,
     title: "Markup",
     icon: <IconSourceCode />,
-    requiredInformation: [],
   },
   [blockTypes.phoneNumber]: {
     type: blockTypes.phoneNumber,
     id: 7,
     title: "PhoneNumber",
     icon: <IconPhoneCalling />,
-    requiredInformation: [],
   },
   [blockTypes.slider]: {
     type: blockTypes.slider,
     id: 8,
     title: "Slider",
     icon: <IconAdjustmentsHorizontal />,
-    requiredInformation: [],
+  },
+  [blockTypes.input]: {
+    type: blockTypes.input,
+    id: 9,
+    title: "Input",
+    icon: <IconInputSearch />,
   },
 };
-
-export const blockDetails = [
-  {
-    type: blockTypes.text,
-    id: 0,
-    title: "Text",
-    icon: <IconAlignBoxLeftMiddle />,
-    requiredInformation: [],
-  },
-];
