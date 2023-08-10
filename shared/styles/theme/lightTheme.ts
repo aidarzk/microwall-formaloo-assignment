@@ -1,48 +1,26 @@
 import { ThemeOptions } from "@mui/material/styles";
-// import { Roboto } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
 import { colorPalette } from "../colorPalette";
-
-// Create a theme instance.
 
 const theme = createTheme();
 
-const lightThemeOptions: ThemeOptions = createTheme({
-  direction: "rtl",
+const lightTheme: ThemeOptions = createTheme({
   palette: {
     mode: "light",
     primary: {
       main: colorPalette.primary,
-      light: red.A400,
       contrastText: colorPalette.white,
     },
     secondary: {
       main: colorPalette.secondary,
-      light: "#dfbe1b",
-    },
-    error: {
-      main: red.A400,
-    },
-    text: {
-      primary: colorPalette.textPrimary,
-      secondary: colorPalette.lightLeaf,
-    },
-    leaf: {
-      main: colorPalette.leaf,
       contrastText: colorPalette.white,
     },
-    zarin: {
-      main: colorPalette.zarin,
-      contrastText: "#fff",
-    },
-    sunset: {
-      main: colorPalette.sunset,
-      contrastText: "#fff",
+    error: {
+      main: colorPalette.error,
     },
   },
   typography: {
-    fontFamily: "IRANSans",
+    // fontFamily: "IRANSans",
     h1: {
       fontSize: "48px",
       fontWeight: 500,
@@ -167,28 +145,4 @@ const lightThemeOptions: ThemeOptions = createTheme({
   },
 });
 
-declare module "@mui/material/styles" {
-  interface Palette {
-    sunset: Palette["primary"];
-    leaf: Palette["primary"];
-    zarin: Palette["primary"];
-  }
-
-  // allow configuration using `createTheme`
-  interface PaletteOptions {
-    sunset?: PaletteOptions["primary"];
-    leaf?: PaletteOptions["primary"];
-    zarin?: PaletteOptions["primary"];
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Button" {
-  interface ButtonPropsColorOverrides {
-    sunset: true;
-    leaf: true;
-    zarin: true;
-  }
-}
-
-export default lightThemeOptions;
+export default lightTheme;

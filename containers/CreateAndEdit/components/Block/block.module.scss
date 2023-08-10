@@ -1,0 +1,49 @@
+@import "@/shared/styles/variables.module.scss";
+
+.blockContainer {
+    gap: 16px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.container {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px;
+  box-shadow: $shadow_2;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  border-radius: 12px;
+  margin: 16px auto;
+  padding: 16px;
+  gap: 16px;
+  min-height: 100%;
+ 
+  & > *:not(:first-child) {
+    margin-top: 1rem;
+  }
+}
+
+.content {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  text-align: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.header {
+  display: flex !important;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $border_1;
+  padding: 8px;
+}
+ 

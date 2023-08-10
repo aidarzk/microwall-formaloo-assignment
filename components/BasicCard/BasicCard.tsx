@@ -1,13 +1,15 @@
-import NextImage from "next/image";
+import Image from "next/image";
 import classes from "./basicCard.module.scss";
-import { Card, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import { Box, Card, Typography } from "@mui/material";
+import { CSSProperties, ReactNode } from "react";
 
 interface BasicCardProps {
   title?: string;
   description?: string;
   imageUrl?: string;
   children?: ReactNode;
+  icon?: ReactNode;
+  className?: string;
 }
 
 export default function BasicCard({
@@ -15,19 +17,26 @@ export default function BasicCard({
   description,
   imageUrl,
   children,
+  icon,
+  className,
 }: BasicCardProps) {
   return (
-    <Card className={classes.card}>
+    <Card className={`${classes.card} ${className}`}>
       {imageUrl && (
-        <NextImage
+        <Image
           src={imageUrl}
           width={128}
           height={128}
           alt={title ? title : "card-image"}
         />
       )}
-      <Typography>{title}</Typography>
-      <Typography className={classes.description}>{description}</Typography>
+      <Box display="flex" justifyContent="center">
+        {icon}
+        {title && <Typography ml={1}>{title}</Typography>}
+      </Box>
+      {description && (
+        <Typography className={classes.description}>{description}</Typography>
+      )}
       {children}
     </Card>
   );

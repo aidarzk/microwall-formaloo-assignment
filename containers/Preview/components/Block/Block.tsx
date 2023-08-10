@@ -1,26 +1,11 @@
-"use client";
-import { useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
-import BasicCard from "@/components/BasicCard/BasicCard";
-import { IconPlus } from "@tabler/icons-react";
+import { Box, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
-import {
-  BlockModel,
-  blockTypes,
-  blockTypesWithDetails,
-} from "@/shared/constants/blockTypes";
+import { BlockModel, blockTypes } from "@/shared/constants/blockTypes";
 
 import classes from "./block.module.scss";
-import { TextField } from "@/components/TextField/TextField";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  addBlockToWall,
-  editBlockEditorData,
-  editBlockViewerData,
-  wallState,
-} from "@/redux/features/wallsSlice";
-import { useParams, useRouter } from "next/navigation";
-import { routes } from "@/shared/constants/routes";
+import { useAppDispatch } from "@/redux/hooks";
+import { editBlockViewerData } from "@/redux/features/wallsSlice";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 const TextViewerBlock = dynamic(() =>
   import("./components").then((res) => res.TextViewerBlock)
@@ -58,6 +43,10 @@ const InputViewerBlock = dynamic(() =>
   import("./components").then((res) => res.InputViewerBlock)
 );
 
+const RadioViewerBlock = dynamic(() =>
+  import("./components").then((res) => res.RadioViewerBlock)
+);
+
 interface BlockProps {
   block: BlockModel;
   blockId: string | number;
@@ -67,19 +56,21 @@ interface BlockProps {
 export const Block = ({ block, wallId, blockId }: BlockProps) => {
   const dispatch = useAppDispatch();
 
-  function handleUpdateBlockByViewer<T>(values: T) {
-    console.log("--11111111-----", values);
-    dispatch(
-      editBlockViewerData({
-        wallId,
-        blockId: blockId,
-        data: values,
-      })
-    );
-  }
+  const handleUpdateBlockByViewer = useDebounce(
+    (values) =>
+      dispatch(
+        editBlockViewerData({
+          wallId,
+          blockId,
+          data: values,
+        })
+      ),
+    2000
+  );
 
   const getViewerComponent = {
     [blockTypes.text]: <TextViewerBlock data={block.editorData} />,
+    [blockTypes.image]: <ImageViewerBlock data={block.editorData} />,
     [blockTypes.checkbox]: (
       <CheckboxViewerBlock
         data={block.editorData}
@@ -104,7 +95,6 @@ export const Block = ({ block, wallId, blockId }: BlockProps) => {
         onUpdateBlockByViewer={handleUpdateBlockByViewer}
       />
     ),
-    [blockTypes.image]: <ImageViewerBlock data={block.editorData} />,
     [blockTypes.phoneNumber]: (
       <PhoneNumberViewerBlock
         data={block.editorData}
@@ -123,10 +113,19 @@ export const Block = ({ block, wallId, blockId }: BlockProps) => {
         onUpdateBlockByViewer={handleUpdateBlockByViewer}
       />
     ),
+    [blockTypes.radioButton]: (
+      <RadioViewerBlock
+        data={block.editorData}
+        onUpdateBlockByViewer={handleUpdateBlockByViewer}
+      />
+    ),
   };
 
   return (
     <Box className={classes.blockContainer} key={block.id}>
+      <Typography variant="h6" fontWeight={700} mb={1}>
+        {block?.editorData?.title}
+      </Typography>
       {getViewerComponent[block.type]}
     </Box>
   );

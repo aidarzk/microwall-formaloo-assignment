@@ -1,14 +1,27 @@
+@import "@/shared/styles/variables.module.scss";
+
 .addButton {
     position: fixed !important;
     bottom: 20px;
-    right: 50px;
-    padding: 24px;
+    right: 30px;
+    padding: 16px !important;
+    box-shadow: $shadow_2 !important;
 }
 
 .header {
     display: flex;
     gap: 16px;
     justify-content: space-between;
+    align-items: center;
+}
+
+.scrollBox {
     display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.headerContainer {
+    position: sticky;
 }
  

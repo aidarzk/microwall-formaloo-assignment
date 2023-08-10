@@ -1,12 +1,15 @@
 import * as React from "react";
 import { BlockModel, blockTypes } from "@/shared/constants/blockTypes";
 import dynamic from "next/dynamic";
-import { BlockBox } from "@/components/BlockBox/BlockBox";
 import { useAppDispatch } from "@/redux/hooks";
 import {
   editBlockEditorData,
   removeBlockById,
 } from "@/redux/features/wallsSlice";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { Box, IconButton, Typography } from "@mui/material";
+import classes from "./block.module.scss";
+import { IconTrashX } from "@tabler/icons-react";
 
 const TextEditorBlock = dynamic(() =>
   import("./components").then((res) => res.TextEditorBlock)
@@ -44,13 +47,18 @@ const InputEditorBlock = dynamic(() =>
   import("./components").then((res) => res.InputEditorBlock)
 );
 
+const RadioEditorBlock = dynamic(() =>
+  import("./components").then((res) => res.RadioEditorBlock)
+);
+
 interface BlockProps {
   block: BlockModel;
   blockId: string;
   wallId: string;
+  blockNo: number;
 }
 
-export const Block = ({ block, blockId, wallId }: BlockProps) => {
+export const Block = ({ block, blockId, wallId, blockNo }: BlockProps) => {
   const dispatch = useAppDispatch();
 
   const handleDeleteBlock = () => {
@@ -62,15 +70,17 @@ export const Block = ({ block, blockId, wallId }: BlockProps) => {
     );
   };
 
-  function handleUpdateBlock<T>(values: T) {
-    dispatch(
-      editBlockEditorData({
-        wallId,
-        blockId,
-        data: values,
-      })
-    );
-  }
+  const handleUpdateBlock = useDebounce(
+    (values) =>
+      dispatch(
+        editBlockEditorData({
+          wallId,
+          blockId,
+          data: values,
+        })
+      ),
+    2000
+  );
 
   const getEditorComponent = {
     [blockTypes.text]: (
@@ -127,11 +137,32 @@ export const Block = ({ block, blockId, wallId }: BlockProps) => {
         onUpdateBlock={handleUpdateBlock}
       />
     ),
+    [blockTypes.radioButton]: (
+      <RadioEditorBlock
+        onUpdateBlock={handleUpdateBlock}
+        data={block.editorData}
+      />
+    ),
   };
 
   return (
-    <BlockBox onDelete={handleDeleteBlock}>
-      {getEditorComponent[block.type]}
-    </BlockBox>
+    <Box className={classes.container}>
+      <Box className={classes.header}>
+        <Typography variant="body1" fontWeight={500}>
+          Block Type: {block?.type} / block No. {blockNo}
+        </Typography>
+        <IconButton color="error" onClick={handleDeleteBlock}>
+          <IconTrashX />
+        </IconButton>
+      </Box>
+      <Box className={classes.content}>
+        <Typography variant="h6" fontWeight={700} mb={1}>
+          {block?.editorData?.title}
+        </Typography>
+        <Box className={classes.blockContainer}>
+          {getEditorComponent[block.type]}
+        </Box>
+      </Box>
+    </Box>
   );
 };

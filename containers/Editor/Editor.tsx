@@ -1,15 +1,16 @@
 "use client";
 
-import { Button, Container, Typography } from "@mui/material";
-import BasicCard from "@/components/BasicCard/BasicCard";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addWall, wallState } from "@/redux/features/wallsSlice";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconSettings } from "@tabler/icons-react";
 import { SimpleDialog } from "@/components/SimpleDialog/SimpleDialog";
 import { ChangeEvent, useState } from "react";
 import { TextField } from "@/components/TextField/TextField";
 import { routes } from "@/shared/constants/routes";
+
+import classes from "./editor.module.scss";
 
 export const Editor = () => {
   const dispatch = useAppDispatch();
@@ -48,19 +49,32 @@ export const Editor = () => {
   return (
     <>
       <Container>
-        <Typography>choose wall:</Typography>
-        {Object.values(walls)?.map((wall) => (
-          <Link key={wall.id} href={`${routes.editor}/${wall.id}`}>
-            <BasicCard title={wall.wallName}></BasicCard>
-          </Link>
-        ))}
-        <Button
-          onClick={() => setIsDialogOpen(true)}
-          variant="contained"
-          startIcon={<IconPlus />}
-        >
-          create new wall
-        </Button>
+        <Typography variant="h5" fontWeight={700} mb={2}>
+          create a wall
+        </Typography>
+        <Grid container>
+          {Object.values(walls)?.map((wall) => (
+            <Link key={wall.id} href={`${routes.editor}/${wall.id}`}>
+              <Grid
+                className={`${classes.createBox} ${classes.wallBox}`}
+                item
+                xl={3}
+              >
+                <Typography>{wall.wallName}</Typography>
+                <IconSettings />
+              </Grid>
+            </Link>
+          ))}
+          <Grid
+            onClick={() => setIsDialogOpen(true)}
+            className={classes.createBox}
+            item
+            xl={3}
+          >
+            <Typography>create new wall</Typography>
+            <IconPlus />
+          </Grid>
+        </Grid>
       </Container>
       <SimpleDialog
         open={isDialogOpen}

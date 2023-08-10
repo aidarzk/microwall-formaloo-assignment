@@ -24,15 +24,16 @@ export const blockTypes = {
   checkbox: "checkbox",
   file: "file",
   markup: "markup",
+  radioButton: "radioButton",
 };
 
 export interface EditorDataModel {
   title?: string;
-  defaultValue?: string;
+  defaultValue?: string | number;
   min?: string | number;
   max?: string | number;
-  value: string | number;
-  options: [];
+  value?: string | number;
+  options?: [] | any;
   label?: string;
 }
 
@@ -107,5 +108,11 @@ export const blockTypesWithDetails: {
     id: 9,
     title: "Input",
     icon: <IconInputSearch />,
+  },
+  [blockTypes.radioButton]: {
+    type: blockTypes.radioButton,
+    id: 10,
+    title: "Radio(single Check)",
+    icon: <IconCheckbox />,
   },
 };

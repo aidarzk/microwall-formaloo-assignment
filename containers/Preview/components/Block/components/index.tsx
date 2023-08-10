@@ -7,3 +7,4 @@ export { ImageViewerBlock } from "./ImageViewerBlock";
 export { PhoneNumberViewerBlock } from "./PhoneNumberViewerBlock";
 export { SliderViewerBlock } from "./SliderViewerBlock";
 export { InputViewerBlock } from "./InputViewerBlock";
+export { RadioViewerBlock } from "./RadioViewerBlock";

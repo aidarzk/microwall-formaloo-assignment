@@ -18,8 +18,10 @@ interface WallState {
 }
 
 const initialBlockState = {
-  [`${blockTypes.text}-0`]: blockTypesWithDetails[blockTypes.text],
-  [`${blockTypes.input}-1`]: blockTypesWithDetails[blockTypes.input],
+  [`${blockTypes.text}-${uuidGenerator()}`]:
+    blockTypesWithDetails[blockTypes.text],
+  [`${blockTypes.input}-${uuidGenerator()}`]:
+    blockTypesWithDetails[blockTypes.input],
 };
 
 const initialState = {} as WallState;

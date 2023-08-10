@@ -1,0 +1,28 @@
+@import "@/shared/styles/variables.module.scss";
+
+ 
+.createBox {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column !important;
+    border-radius: 12px;
+    border: 2px dashed $primary;
+    padding: 16px;
+    cursor: pointer;
+    width: 160px;
+    height: 160px;
+    margin-right: 16px !important;
+    max-width: 100% !important;
+}
+ 
+.wallBox {
+    background-color: $white;
+    border: none !important;
+    box-shadow: $shadow_1;
+    transition: 0.3s;
+    &:hover {
+        box-shadow: $shadow_3;  
+    }
+}

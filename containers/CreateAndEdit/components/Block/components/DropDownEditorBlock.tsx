@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
 import {
   IconButton,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -13,15 +12,9 @@ import FormControl from "@mui/material/FormControl";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-
-interface DropDownValuesModel {
-  title: string;
-  options: string[];
-}
 
 interface DropDownEditorBlockProps {
-  onUpdateBlock: (args: DropDownValuesModel) => void;
+  onUpdateBlock: (args: EditorDataModel) => void;
   data?: EditorDataModel;
 }
 
@@ -29,14 +22,12 @@ export const DropDownEditorBlock = ({
   onUpdateBlock,
   data,
 }: DropDownEditorBlockProps) => {
-  const [values, setValues] = useState<DropDownValuesModel>({
+  const [values, setValues] = useState<EditorDataModel>({
     title: "",
     options: ["option1"],
   });
 
   const { title, options } = values;
-
-  const debouncedValue = useDebounce<DropDownValuesModel>(values, 2000);
 
   const handleChangeTitle = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -45,10 +36,16 @@ export const DropDownEditorBlock = ({
       ...values,
       title: e?.target.value,
     });
+    onUpdateBlock({ ...values, title: e?.target.value });
   };
 
   const handleAddOption = () => {
     setValues({
+      ...values,
+      options: [...values.options, `option ${values.options.length + 1}`],
+    });
+
+    onUpdateBlock({
       ...values,
       options: [...values.options, `option ${values.options.length + 1}`],
     });
@@ -67,6 +64,11 @@ export const DropDownEditorBlock = ({
       ...values,
       options: optionsCopy,
     });
+
+    onUpdateBlock({
+      ...values,
+      options: optionsCopy,
+    });
   };
 
   const handleDeleteOption = (index: number) => {
@@ -80,20 +82,18 @@ export const DropDownEditorBlock = ({
       ...values,
       options: optionsCopy,
     });
+
+    onUpdateBlock({
+      ...values,
+      options: optionsCopy,
+    });
   };
 
   useEffect(() => {
-    if (data?.options?.length && data?.options?.length > 0) {
-      setValues({
-        ...values,
-        options: data?.options,
-      });
+    if ((data?.options?.length && data?.options?.length > 0) || data?.title) {
+      setValues(data);
     }
-  }, [data?.options]);
-
-  useEffect(() => {
-    onUpdateBlock(values);
-  }, [debouncedValue]);
+  }, [data]);
 
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
@@ -104,8 +104,6 @@ export const DropDownEditorBlock = ({
   return (
     <>
       <Box className={classes.container}>
-        <Typography mb={1}>{title}</Typography>
-
         <FormControl fullWidth>
           <Select
             labelId="demo-simple-select-label"
@@ -113,7 +111,7 @@ export const DropDownEditorBlock = ({
             value={selectedOption}
             onChange={handleChangeSelect}
           >
-            {options.map((opt) => (
+            {options.map((opt: string) => (
               <MenuItem key={opt} value={opt}>
                 {opt}
               </MenuItem>
@@ -130,7 +128,7 @@ export const DropDownEditorBlock = ({
 
         <Box mt={1}>
           <Typography variant="caption">options</Typography>
-          {options.map((opt, index) => (
+          {options.map((opt: string, index: number) => (
             <Box key={index} className={classes.takeOptionsBox}>
               <TextField
                 value={opt}

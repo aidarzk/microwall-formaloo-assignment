@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -20,45 +19,36 @@ export const CheckboxViewerBlock = ({
     options: [],
   });
 
-  const debouncedValue = useDebounce(values, 2000);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
+    const newValues = {
       ...values,
       options: {
         ...values.options,
         [event.target.name]: event.target.checked,
       },
-    });
+    };
+    setValues(newValues);
+    onUpdateBlockByViewer(newValues);
   };
 
-  useEffect(() => {
-    onUpdateBlockByViewer(values);
-  }, [debouncedValue]);
-
   return (
-    <>
-      <Typography variant="h6" fontWeight={700} mb={1}>
-        {data?.title}
-      </Typography>
-      <FormControl component="fieldset" variant="standard">
-        <FormGroup>
-          {data?.options?.map((opt) => (
-            <>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    // checked={gilad}
-                    onChange={handleChange}
-                    name={`${opt}`}
-                  />
-                }
-                label={opt}
-              />
-            </>
-          ))}
-        </FormGroup>
-      </FormControl>
-    </>
+    <FormControl component="fieldset" variant="standard">
+      <FormGroup>
+        {data?.options?.map((opt: string) => (
+          <>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  // checked={gilad}
+                  onChange={handleChange}
+                  name={`${opt}`}
+                />
+              }
+              label={opt}
+            />
+          </>
+        ))}
+      </FormGroup>
+    </FormControl>
   );
 };

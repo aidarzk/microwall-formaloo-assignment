@@ -21,15 +21,8 @@ export const FileEditorBlock = ({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setTitle(e?.target.value);
+    onUpdateBlock({ title: e?.target.value });
   };
-
-  const debouncedValue = useDebounce<string>(title, 2000);
-
-  useEffect(() => {
-    onUpdateBlock({
-      title,
-    });
-  }, [debouncedValue]);
 
   useEffect(() => {
     if (data?.title) {
@@ -39,24 +32,13 @@ export const FileEditorBlock = ({
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "start",
-        }}
-      >
-        <Typography mb={1}>{title}</Typography>
-
-        <input type="file" />
-      </Box>
+      <input type="file" />
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
-          please provide required information:
+          please provide information:
         </Typography>
-        <TextField onChange={handleChange} label="title" required />
+        <TextField onChange={handleChange} label="title" value={title} />
       </Box>
     </>
   );

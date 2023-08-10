@@ -3,55 +3,76 @@ import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
-import { useDebounce } from "@/shared/hooks/useDebounce";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { useStateCallback } from "@/shared/hooks/useStateCallback";
+import { validateImageUrl } from "@/shared/utilities/validations";
 
 interface ImageEditorBlockProps {
-  onUpdateBlock: (args: ImageEditorValuesModel) => void;
+  onUpdateBlock: (args: EditorDataModel) => void;
   data?: EditorDataModel;
-}
-
-interface ImageEditorValuesModel {
-  title: string;
-  value: string;
 }
 
 export const ImageEditorBlock = ({
   onUpdateBlock,
   data,
 }: ImageEditorBlockProps) => {
-  const [values, setValues] = useState<ImageEditorValuesModel>({
+  const [values, setValues] = useStateCallback<EditorDataModel>({
     title: "",
     value: "",
   });
 
+  const [error, setError] = useState<boolean>(false);
+
+  const { title, value } = values;
+
+  const validateField = (name: string, value: string) => {
+    if (name === "value") {
+      const validation = validateImageUrl(value);
+      !validation && setError(true);
+    }
+  };
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setValues({
-      ...values,
-      [e.target.id]: e?.target.value,
-    });
+    setValues(
+      {
+        ...values,
+        [e.target.id]: e?.target.value,
+      },
+      validateField(e.target.id, e?.target.value)
+    );
+
+    onUpdateBlock({ ...values, [e.target.id]: e?.target.value });
   };
 
-  const debouncedValue = useDebounce<ImageEditorValuesModel>(values, 2000);
-
   useEffect(() => {
-    onUpdateBlock(values);
-  }, [debouncedValue]);
+    if (data) {
+      setValues(data);
+    }
+  }, [data]);
 
   return (
     <>
-      <Box className={classes.container}>
-        <Typography mb={1}>{data?.title}</Typography>
-        <TextField id="value" placeholder="please add a varified image url" />
-      </Box>
+      <TextField
+        id="value"
+        placeholder="please add a varified image url"
+        onChange={handleChange}
+        value={value}
+        error={error}
+        helperText={error ? "image url is not valid" : ""}
+      />
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
           please provide information:
         </Typography>
-        <TextField onChange={handleChange} label="title" id="title" />
+        <TextField
+          onChange={handleChange}
+          label="title"
+          id="title"
+          value={title}
+        />
       </Box>
     </>
   );

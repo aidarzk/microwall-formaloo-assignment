@@ -2,20 +2,17 @@
 import { useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import BasicCard from "@/components/BasicCard/BasicCard";
-import { IconPlus } from "@tabler/icons-react";
+import { IconEye, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import {
-  blockTypes,
-  blockTypesWithDetails,
-} from "@/shared/constants/blockTypes";
 import { DragableBlocks } from "./components/DragableBlocks/DragableBlocks";
 
 import classes from "./createAndEdit.module.scss";
-import { TextField } from "@/components/TextField/TextField";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addBlockToWall, wallState } from "@/redux/features/wallsSlice";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { routes } from "@/shared/constants/routes";
+import Link from "next/link";
+import { uuidGenerator } from "@/shared/utilities/uuidGenerator";
 
 const AddBlockDrawer = dynamic(() =>
   import("./components").then((res) => res.AddBlockDrawer)
@@ -23,8 +20,6 @@ const AddBlockDrawer = dynamic(() =>
 
 export const CreateAndEdit = () => {
   const params = useParams();
-
-  const router = useRouter();
 
   const wallId = (params?.slug as string) || "";
 
@@ -34,15 +29,10 @@ export const CreateAndEdit = () => {
 
   const wallName = useAppSelector(wallState)[wallId]?.wallName;
 
-  // console.log({ wallId });
-  console.log({ blocks });
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleAddBlock = (block: any) => {
-    const blocksKeys = blocks ? Object.keys(blocks) : [];
-
-    const uniqueId = `${block.type}-${blocksKeys.length}`;
+    const uniqueId = `${block.type}-${uuidGenerator()}`;
     dispatch(
       addBlockToWall({
         wallId,
@@ -52,25 +42,40 @@ export const CreateAndEdit = () => {
   };
   console.log({ blocks });
 
+  const [scrollTo, setScrollTo] = useState(0);
+
   return (
     <>
       <Container>
-        <BasicCard>
+        <BasicCard className={classes.headerContainer}>
           <Box className={classes.header}>
             <Typography variant="h3">{wallName}</Typography>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => router.push(`${routes.viewer}/${wallId}`)}
-            >
-              preview
-            </Button>
+            <Link href={`${routes.viewer}/${wallId}`} target="_blank">
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<IconEye />}
+              >
+                preview
+              </Button>
+            </Link>
+          </Box>
+          <Box className={classes.scrollBox}>
+            {Object.keys(blocks)?.map((block, index) => (
+              <Button
+                variant="outlined"
+                key={block}
+                onClick={() => setScrollTo(index)}
+              >
+                block No. {index + 1}
+              </Button>
+            ))}
           </Box>
         </BasicCard>
 
         <BasicCard>
-          <DragableBlocks blocks={blocks} wallId={wallId} />
+          <DragableBlocks blocks={blocks} wallId={wallId} scrollTo={scrollTo} />
         </BasicCard>
 
         <Button

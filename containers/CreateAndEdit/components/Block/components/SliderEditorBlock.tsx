@@ -4,23 +4,17 @@ import { TextField } from "@/components/TextField/TextField";
 import { Slider, Typography } from "@mui/material";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
-import { useDebounce } from "@/shared/hooks/useDebounce";
 
-interface SliderValuesModel {
-  title: string;
-  defaultValue: number;
-  min: number;
-  max: number;
-}
 interface SliderEditorBlockProps {
-  onUpdateBlock: (args: SliderValuesModel) => void;
+  onUpdateBlock: (args: EditorDataModel) => void;
   data?: EditorDataModel;
 }
 
 export const SliderEditorBlock = ({
   onUpdateBlock,
+  data,
 }: SliderEditorBlockProps) => {
-  const [values, setValues] = useState<SliderValuesModel>({
+  const [values, setValues] = useState<EditorDataModel>({
     title: "",
     max: 100,
     min: 0,
@@ -36,19 +30,24 @@ export const SliderEditorBlock = ({
       ...values,
       [e.target.id]: e?.target.value,
     });
+
+    onUpdateBlock({ ...values, [e.target.id]: e?.target.value });
   };
 
-  const debouncedValue = useDebounce<SliderValuesModel>(values, 2000);
-
   useEffect(() => {
-    onUpdateBlock(values);
-  }, [debouncedValue]);
+    if (data) {
+      setValues(data);
+    }
+  }, [data]);
 
   return (
     <>
       <Box className={classes.container}>
-        <Typography mb={1}>{title}</Typography>
-        <Slider defaultValue={defaultValue} min={min} max={max} />
+        <Slider
+          defaultValue={defaultValue ? +defaultValue : 50}
+          min={min ? +min : 0}
+          max={max ? +max : 100}
+        />
       </Box>
 
       <Box className={classes.takeInfoBox}>
@@ -60,20 +59,23 @@ export const SliderEditorBlock = ({
           onChange={handleChange}
           label="title"
           id="title"
+          value={title}
         />
         <TextField
           sx={{ mb: 1 }}
           onChange={handleChange}
           label="defaultValue"
           id="defaultValue"
+          value={defaultValue}
         />
         <TextField
           sx={{ mb: 1 }}
           onChange={handleChange}
           label="min"
           id="min"
+          value={min}
         />
-        <TextField onChange={handleChange} label="max" id="max" />
+        <TextField onChange={handleChange} label="max" id="max" value={max} />
       </Box>
     </>
   );

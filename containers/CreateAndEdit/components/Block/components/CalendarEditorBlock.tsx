@@ -1,13 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { Textarea } from "@/components/TextArea/TextArea";
 import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import classes from "./index.module.scss";
-import { useDebounce } from "@/shared/hooks/useDebounce";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
 
 interface CalendarEditorBlockProps {
@@ -25,15 +23,8 @@ export const CalendarEditorBlock = ({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setTitle(e?.target.value);
+    onUpdateBlock({ title: e?.target.value });
   };
-
-  const debouncedValue = useDebounce<string>(title, 2000);
-
-  useEffect(() => {
-    onUpdateBlock({
-      title,
-    });
-  }, [debouncedValue]);
 
   useEffect(() => {
     if (data?.title) {
@@ -44,7 +35,6 @@ export const CalendarEditorBlock = ({
   return (
     <>
       <Box className={classes.container}>
-        <Typography mb={1}>{title}</Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker />
         </LocalizationProvider>
@@ -54,7 +44,7 @@ export const CalendarEditorBlock = ({
         <Typography variant="body2" mb={1}>
           please provide required information:
         </Typography>
-        <TextField onChange={handleChange} label="title" required />
+        <TextField onChange={handleChange} label="title" value={title} />
       </Box>
     </>
   );

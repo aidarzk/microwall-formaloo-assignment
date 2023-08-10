@@ -1,3 +1,4 @@
+"use client";
 import { Home } from "@/containers/Home/Home";
 
 export default function HomePage() {
