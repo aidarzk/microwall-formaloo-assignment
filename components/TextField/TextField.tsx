@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { ChangeEvent, ReactNode, Ref, useEffect, useState } from "react";
-import { IconButton, InputAdornment, InputProps } from "@mui/material";
+import { ChangeEvent } from "react";
 import MuiTextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 
 export interface CustomTextFieldProps

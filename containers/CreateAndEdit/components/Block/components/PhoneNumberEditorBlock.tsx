@@ -1,26 +1,26 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import Grid from "@mui/material/Grid";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
 import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { EditorDataModel } from "@/shared/constants/blockTypes";
-
-interface PhoneNumberEditorBlockProps {
+import { PhoneNumberInput } from "@/components/PhoneNumberInput/PhoneNumberInput";
+interface PhoneNumberEditorBlock {
   onUpdateBlock: (args: EditorDataModel) => void;
   data?: EditorDataModel;
 }
 
-export const PhoneNumberEditorBlock = ({
+export const PhoneNumberEditorBlock: React.FC<PhoneNumberEditorBlock> = ({
   onUpdateBlock,
   data,
-}: PhoneNumberEditorBlockProps) => {
+}) => {
   const [values, setValues] = useState<EditorDataModel>({
     title: "",
-    label: "",
   });
 
-  const { title, label } = values;
+  const { title } = values;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -29,7 +29,6 @@ export const PhoneNumberEditorBlock = ({
       ...values,
       [e.target.id]: e?.target.value,
     });
-
     onUpdateBlock({ ...values, [e.target.id]: e?.target.value });
   };
 
@@ -41,10 +40,7 @@ export const PhoneNumberEditorBlock = ({
 
   return (
     <>
-      <Box className={classes.container}>
-        <TextField label={label} />
-      </Box>
-
+      <PhoneNumberInput />
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
           please provide information:
@@ -56,14 +52,9 @@ export const PhoneNumberEditorBlock = ({
           id="title"
           value={title}
         />
-        <TextField
-          sx={{ mb: 1 }}
-          onChange={handleChange}
-          label="label"
-          id="label"
-          value={label}
-        />
       </Box>
     </>
   );
 };
+
+const countryCodes = ["+1", "+44", "+49", "+81", "+98"]; // Example country codes

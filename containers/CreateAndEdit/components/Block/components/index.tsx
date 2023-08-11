@@ -8,6 +8,5 @@ export { PhoneNumberEditorBlock } from "./PhoneNumberEditorBlock";
 export { SliderEditorBlock } from "./SliderEditorBlock";
 export { InputEditorBlock } from "./InputEditorBlock";
 export { RadioEditorBlock } from "./RadioEditorBlock";
-// export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
-// export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
-// export { DropDownEditorBlock } from "./DropDownEditorBlock/DropDownEditorBlock";
+export { MarkupEditorBlock } from "./MarkupEditorBlock";
+export { HtmlEditorBlock } from "./HtmlEditorBlock";

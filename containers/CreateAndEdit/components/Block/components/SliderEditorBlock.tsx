@@ -1,9 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
-import { Slider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { Slider } from "@/components/Slider/Slider";
 
 interface SliderEditorBlockProps {
   onUpdateBlock: (args: EditorDataModel) => void;
@@ -44,9 +45,11 @@ export const SliderEditorBlock = ({
     <>
       <Box className={classes.container}>
         <Slider
-          defaultValue={defaultValue ? +defaultValue : 50}
-          min={min ? +min : 0}
-          max={max ? +max : 100}
+          data={{
+            defaultValue: defaultValue ? +defaultValue : 50,
+            min: min ? +min : 0,
+            max: max ? +max : 100,
+          }}
         />
       </Box>
 

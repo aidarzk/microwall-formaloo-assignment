@@ -51,6 +51,14 @@ const RadioEditorBlock = dynamic(() =>
   import("./components").then((res) => res.RadioEditorBlock)
 );
 
+const MarkupEditorBlock = dynamic(() =>
+  import("./components").then((res) => res.MarkupEditorBlock)
+);
+
+const HtmlEditorBlock = dynamic(() =>
+  import("./components").then((res) => res.HtmlEditorBlock)
+);
+
 interface BlockProps {
   block: BlockModel;
   blockId: string;
@@ -139,6 +147,18 @@ export const Block = ({ block, blockId, wallId, blockNo }: BlockProps) => {
     ),
     [blockTypes.radioButton]: (
       <RadioEditorBlock
+        onUpdateBlock={handleUpdateBlock}
+        data={block.editorData}
+      />
+    ),
+    [blockTypes.markup]: (
+      <MarkupEditorBlock
+        onUpdateBlock={handleUpdateBlock}
+        data={block.editorData}
+      />
+    ),
+    [blockTypes.html]: (
+      <HtmlEditorBlock
         onUpdateBlock={handleUpdateBlock}
         data={block.editorData}
       />

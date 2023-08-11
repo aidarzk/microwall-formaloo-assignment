@@ -6,12 +6,14 @@ import {
   IconCalendarEvent,
   IconCheckbox,
   IconFileUpload,
+  IconHtml,
   IconInputSearch,
   IconPhoneCalling,
   IconPhotoPlus,
   IconSelect,
   IconSourceCode,
 } from "@tabler/icons-react";
+import { initialContents } from "./initialContents";
 
 export const blockTypes = {
   text: "text",
@@ -25,6 +27,7 @@ export const blockTypes = {
   file: "file",
   markup: "markup",
   radioButton: "radioButton",
+  html: "html",
 };
 
 export interface EditorDataModel {
@@ -60,6 +63,9 @@ export const blockTypesWithDetails: {
     id: 1,
     title: "Checkbox",
     icon: <IconCheckbox />,
+    editorData: {
+      options: initialContents.optionsInitialContent,
+    },
   },
   [blockTypes.calendar]: {
     type: blockTypes.calendar,
@@ -72,6 +78,9 @@ export const blockTypesWithDetails: {
     id: 3,
     title: "DropDown",
     icon: <IconSelect />,
+    editorData: {
+      options: initialContents.optionsInitialContent,
+    },
   },
   [blockTypes.file]: {
     type: blockTypes.file,
@@ -114,5 +123,17 @@ export const blockTypesWithDetails: {
     id: 10,
     title: "Radio(single Check)",
     icon: <IconCheckbox />,
+    editorData: {
+      options: initialContents.optionsInitialContent,
+    },
+  },
+  [blockTypes.html]: {
+    type: blockTypes.html,
+    id: 11,
+    title: "HTML",
+    icon: <IconHtml />,
+    editorData: {
+      value: initialContents.htmlInitialContent,
+    },
   },
 };

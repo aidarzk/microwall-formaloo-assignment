@@ -1,6 +1,6 @@
 "use client";
 import { persistor, store } from "@/redux/store";
-import "./globals.scss";
+import "@/shared/styles/globals.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";

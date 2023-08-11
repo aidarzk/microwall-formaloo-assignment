@@ -8,5 +8,9 @@
     flex-direction:  column ;
     width: 100%;
     align-items: start;
+
+    &:last-child {
+        border: none !important;
+    }
 }
  

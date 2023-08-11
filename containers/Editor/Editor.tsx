@@ -22,8 +22,6 @@ export const Editor = () => {
 
   const [wallNameError, setWallNameError] = useState<boolean>(false);
 
-  console.log({ walls });
-
   const handleClose = () => {
     setIsDialogOpen(false);
     setWallNameError(false);

@@ -5,6 +5,7 @@ import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { File } from "@/components/File/File";
 
 interface FileEditorBlockProps {
   onUpdateBlock: (args: any) => void;
@@ -32,7 +33,7 @@ export const FileEditorBlock = ({
 
   return (
     <>
-      <input type="file" />
+      <File />
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>

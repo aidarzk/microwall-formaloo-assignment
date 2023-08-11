@@ -9,14 +9,16 @@
     border-radius: 12px;
      padding: 16px;
     cursor: pointer;
-    width: 160px;
-    height: 160px;
     margin-right: 16px !important;
     background-color: $primary;
     color: $white;
     box-shadow: $shadow_4;
     transition: 0.3s;
     max-width: 100% !important;
+    width: 160px !important;
+    height: 160px !important;
+    max-width: 100% !important;
+    margin-bottom: 16px !important;
     &:hover {
         box-shadow: $shadow_5;  
     }

@@ -9,7 +9,7 @@ import { useDynamicRefs } from "@/shared/hooks/useDynamicRefs";
 export const DragableBlocks = ({ blocks, wallId, scrollTo }: any) => {
   const dispatch = useAppDispatch();
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<string[]>([]);
 
   const itemRefs = useDynamicRefs(items.length);
 
@@ -34,17 +34,16 @@ export const DragableBlocks = ({ blocks, wallId, scrollTo }: any) => {
     }
   }, [blocks]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
     const newItems = Array.from(items);
     const [removed] = newItems.splice(result.source.index, 1);
     newItems.splice(result.destination.index, 0, removed);
-    const newBlocks: object = {};
+    const newBlocks: { [key: string]: any } = {};
     setItems(newItems);
     newItems.forEach((element) => {
       newBlocks[element] = blocks[element];
     });
 
-    console.log({ newBlocks });
     dispatch(
       reorderBlocks({
         wallId,

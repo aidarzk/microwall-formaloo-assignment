@@ -12,6 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { DropDown } from "@/components/DropDown/DropDown";
 
 interface DropDownEditorBlockProps {
   onUpdateBlock: (args: EditorDataModel) => void;
@@ -24,10 +25,10 @@ export const DropDownEditorBlock = ({
 }: DropDownEditorBlockProps) => {
   const [values, setValues] = useState<EditorDataModel>({
     title: "",
-    options: ["option1"],
+    options: [],
   });
 
-  const { title, options } = values;
+  const { options } = values;
 
   const handleChangeTitle = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -95,34 +96,15 @@ export const DropDownEditorBlock = ({
     }
   }, [data]);
 
-  const [selectedOption, setSelectedOption] = useState(options[0]);
-
-  const handleChangeSelect = (event: SelectChangeEvent) => {
-    setSelectedOption(event.target.value as string);
-  };
-
   return (
     <>
       <Box className={classes.container}>
-        <FormControl fullWidth>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedOption}
-            onChange={handleChangeSelect}
-          >
-            {options.map((opt: string) => (
-              <MenuItem key={opt} value={opt}>
-                {opt}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <DropDown data={{ options }} />
       </Box>
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
-          please provide required information:
+          please provide information:
         </Typography>
         <TextField onChange={handleChangeTitle} label="title" />
 

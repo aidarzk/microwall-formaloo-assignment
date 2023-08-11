@@ -5,10 +5,10 @@ import { IconButton, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { Checkbox } from "@/components/Checkbox/Checkbox";
 
 interface CheckboxEditorBlockProps {
   onUpdateBlock: (args: EditorDataModel) => void;
@@ -21,7 +21,7 @@ export const CheckboxEditorBlock = ({
 }: CheckboxEditorBlockProps) => {
   const [values, setValues] = useState<EditorDataModel>({
     title: "",
-    options: ["option 1"],
+    options: [],
   });
 
   const { title, options } = values;
@@ -95,22 +95,12 @@ export const CheckboxEditorBlock = ({
   return (
     <>
       <Box className={classes.container}>
-        <FormControl component="fieldset" variant="standard">
-          <FormGroup>
-            {options.map((opt: string) => (
-              <FormControlLabel
-                key={opt}
-                control={<Checkbox name={`${opt}`} />}
-                label={opt}
-              />
-            ))}
-          </FormGroup>
-        </FormControl>
+        <Checkbox data={{ options }} />
       </Box>
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
-          please provide required information:
+          please provide information:
         </Typography>
         <TextField onChange={handleChangeTitle} label="title" value={title} />
 

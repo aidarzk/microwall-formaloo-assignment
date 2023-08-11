@@ -1,26 +1,25 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
+import { Textarea } from "@/components/TextArea/TextArea";
 import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
 
-interface InputEditorBlockProps {
+interface MarkupEditorBlockProps {
   onUpdateBlock: (args: EditorDataModel) => void;
   data?: EditorDataModel;
 }
 
-export const InputEditorBlock = ({
+export const MarkupEditorBlock = ({
   onUpdateBlock,
   data,
-}: InputEditorBlockProps) => {
+}: MarkupEditorBlockProps) => {
   const [values, setValues] = useState<EditorDataModel>({
     title: "",
-    label: "",
-    defaultValue: "",
   });
 
-  const { title, label, defaultValue } = values;
+  const { title } = values;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -40,30 +39,19 @@ export const InputEditorBlock = ({
 
   return (
     <>
-      <TextField label={label} defaultValue={defaultValue} />
+      <Box className={classes.container}>
+        <Textarea id="value" minRows={3} />
+      </Box>
+
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
           please provide information:
         </Typography>
         <TextField
-          sx={{ mb: 1 }}
+          id="title"
           onChange={handleChange}
           label="title"
-          id="title"
           value={title}
-        />
-        <TextField
-          sx={{ mb: 1 }}
-          onChange={handleChange}
-          label="label"
-          id="label"
-          value={label}
-        />
-        <TextField
-          onChange={handleChange}
-          label="defaultValue"
-          id="defaultValue"
-          value={defaultValue}
         />
       </Box>
     </>

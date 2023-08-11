@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { Calendar } from "@/components/Calendar/Calendar";
 
 interface CalendarEditorBlockProps {
   onUpdateBlock: (args: { title: string }) => void;
@@ -35,9 +36,7 @@ export const CalendarEditorBlock = ({
   return (
     <>
       <Box className={classes.container}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker />
-        </LocalizationProvider>
+        <Calendar />
       </Box>
 
       <Box className={classes.takeInfoBox}>
