@@ -38,6 +38,9 @@ export interface EditorDataModel {
   value?: string | number;
   options?: [] | any;
   label?: string;
+  width?: number;
+  height?: number;
+  alt?: string;
 }
 
 export interface BlockModel {

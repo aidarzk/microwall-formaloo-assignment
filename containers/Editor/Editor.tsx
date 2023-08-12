@@ -1,16 +1,17 @@
 "use client";
-
-import { Button, Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addWall, wallState } from "@/redux/features/wallsSlice";
+import { ChangeEvent, useState } from "react";
+//ui
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { IconPlus, IconSettings } from "@tabler/icons-react";
 import { SimpleDialog } from "@/components/SimpleDialog/SimpleDialog";
-import { ChangeEvent, useState } from "react";
 import { TextField } from "@/components/TextField/TextField";
-import { routes } from "@/shared/constants/routes";
-
 import classes from "./editor.module.scss";
+//redux
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addWall, wallState } from "@/redux/features/wallsSlice";
+//shared
+import { routes } from "@/shared/constants/routes";
 
 export const Editor = () => {
   const dispatch = useAppDispatch();
@@ -99,6 +100,9 @@ export const Editor = () => {
           label="Wall Name"
           fullWidth
           error={wallNameError}
+          inputProps={{
+            maxLength: 10,
+          }}
           helperText={wallNameError && "wall name is required"}
         />
       </SimpleDialog>

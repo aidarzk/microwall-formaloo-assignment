@@ -17,13 +17,13 @@ export const DragableBlocks = ({ blocks, wallId, scrollTo }: any) => {
     if (itemRefs.current[index]?.current) {
       itemRefs.current[index]?.current?.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
   };
 
   useEffect(() => {
-    if (scrollTo) {
+    if (scrollTo >= 0) {
       scrollToItem(scrollTo);
     }
   }, [scrollTo]);

@@ -3,9 +3,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { ChangeEvent } from "react";
 
 interface RadioButtonProps {
-  onChange?: (args: any) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>, value: string) => void;
   data?: EditorDataModel;
 }
 

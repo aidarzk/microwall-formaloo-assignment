@@ -1,7 +1,9 @@
 import { createRef, useEffect, useRef } from "react";
 
 export function useDynamicRefs(length: number) {
-  const refs = useRef<Array<React.RefObject<HTMLLIElement>>>([]);
+  const refs = useRef<Array<React.RefObject<HTMLLIElement | HTMLDivElement>>>(
+    []
+  );
 
   // Update refs when the length changes
   useEffect(() => {

@@ -12,10 +12,10 @@ interface PhoneNumberEditorBlock {
   data?: EditorDataModel;
 }
 
-export const PhoneNumberEditorBlock: React.FC<PhoneNumberEditorBlock> = ({
+export const PhoneNumberEditorBlock = ({
   onUpdateBlock,
   data,
-}) => {
+}: PhoneNumberEditorBlock) => {
   const [values, setValues] = useState<EditorDataModel>({
     title: "",
   });

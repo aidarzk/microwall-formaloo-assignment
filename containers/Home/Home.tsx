@@ -1,11 +1,12 @@
-import Image from "next/image";
+import Link from "next/link";
+//ui
 import classes from "./home.module.scss";
 import { Box, Container, Typography } from "@mui/material";
 import BasicCard from "@/components/BasicCard/BasicCard";
-import Link from "next/link";
-import { routes } from "@/shared/constants/routes";
 import { IconEdit, IconEye, IconWallpaper } from "@tabler/icons-react";
+//shared
 import { colorPalette } from "@/shared/styles/colorPalette";
+import { routes } from "@/shared/constants/routes";
 
 export const Home = () => {
   return (

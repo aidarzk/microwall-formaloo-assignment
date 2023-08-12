@@ -1,7 +1,7 @@
 import Image from "next/image";
 import classes from "./basicCard.module.scss";
 import { Box, Card, Typography } from "@mui/material";
-import { CSSProperties, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface BasicCardProps {
   title?: string;

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { BlockModel, blockTypes } from "@/shared/constants/blockTypes";
 import dynamic from "next/dynamic";
 import { useAppDispatch } from "@/redux/hooks";

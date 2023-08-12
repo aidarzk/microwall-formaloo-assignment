@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { EditorDataModel } from "@/shared/constants/blockTypes";
+import { InputHTMLAttributes } from "react";
 
 interface FileProps {
-  data?: EditorDataModel;
-  onChange?: (args: any) => void;
+  onChange?: (e: InputHTMLAttributes<HTMLInputElement>) => void;
 }
 
-export const File = ({ data, onChange }: FileProps) => {
+export const File = ({ onChange }: FileProps) => {
   return <input type="file" onChange={onChange} />;
 };

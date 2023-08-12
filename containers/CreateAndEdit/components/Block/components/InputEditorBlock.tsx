@@ -59,12 +59,6 @@ export const InputEditorBlock = ({
           id="label"
           value={label}
         />
-        <TextField
-          onChange={handleChange}
-          label="defaultValue"
-          id="defaultValue"
-          value={defaultValue}
-        />
       </Box>
     </>
   );

@@ -1,10 +1,12 @@
 "use client";
-import { Button, Container, Typography } from "@mui/material";
+import { useParams } from "next/navigation";
+//ui
+import { Container, Typography } from "@mui/material";
 import BasicCard from "@/components/BasicCard/BasicCard";
-
+//redux
 import { useAppSelector } from "@/redux/hooks";
 import { wallState } from "@/redux/features/wallsSlice";
-import { useParams } from "next/navigation";
+//components
 import { Block } from "./components/Block/Block";
 
 export const Preview = () => {

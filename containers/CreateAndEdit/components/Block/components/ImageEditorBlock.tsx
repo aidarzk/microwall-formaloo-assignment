@@ -19,11 +19,14 @@ export const ImageEditorBlock = ({
   const [values, setValues] = useStateCallback<EditorDataModel>({
     title: "",
     value: "",
+    width: 100,
+    height: 100,
+    alt: "",
   });
 
   const [error, setError] = useState<boolean>(false);
 
-  const { title, value } = values;
+  const { title, value, width, height, alt } = values;
 
   const validateField = (name: string, value: string) => {
     if (name === "value") {
@@ -72,7 +75,23 @@ export const ImageEditorBlock = ({
           label="title"
           id="title"
           value={title}
+          sx={{ mb: 1 }}
         />
+        <TextField
+          onChange={handleChange}
+          label="width"
+          id="width"
+          value={width}
+          sx={{ mb: 1 }}
+        />
+        <TextField
+          onChange={handleChange}
+          label="height"
+          id="height"
+          value={height}
+          sx={{ mb: 1 }}
+        />
+        <TextField onChange={handleChange} label="alt" id="alt" value={alt} />
       </Box>
     </>
   );

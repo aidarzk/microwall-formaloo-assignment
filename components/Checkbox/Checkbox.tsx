@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import MuiCheckbox from "@mui/material/Checkbox";
+import { EditorDataModel } from "@/shared/constants/blockTypes";
 
 interface CheckboxProps {
-  data?: any;
-  onChange?: (args: any) => void;
+  data?: EditorDataModel;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Checkbox = ({ onChange, data }: CheckboxProps) => {

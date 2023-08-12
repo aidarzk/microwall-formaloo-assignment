@@ -20,7 +20,6 @@ const lightTheme: ThemeOptions = createTheme({
     },
   },
   typography: {
-    // fontFamily: "IRANSans",
     h1: {
       fontSize: "48px",
       fontWeight: 500,

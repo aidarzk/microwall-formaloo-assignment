@@ -1,17 +1,19 @@
 "use client";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+// ui
 import { Box, Button, Container, Typography } from "@mui/material";
 import BasicCard from "@/components/BasicCard/BasicCard";
 import { IconEye, IconPlus } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
-import { DragableBlocks } from "./components/DragableBlocks/DragableBlocks";
-
 import classes from "./createAndEdit.module.scss";
+//redux
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addBlockToWall, wallState } from "@/redux/features/wallsSlice";
-import { useParams } from "next/navigation";
+//shared & components
+import { DragableBlocks } from "./components/DragableBlocks/DragableBlocks";
 import { routes } from "@/shared/constants/routes";
-import Link from "next/link";
 import { uuidGenerator } from "@/shared/utilities/uuidGenerator";
 
 const AddBlockDrawer = dynamic(() =>
@@ -31,6 +33,8 @@ export const CreateAndEdit = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const [scrollTo, setScrollTo] = useState(0);
+
   const handleAddBlock = (block: any) => {
     const uniqueId = `${block.type}-${uuidGenerator()}`;
     dispatch(
@@ -40,9 +44,6 @@ export const CreateAndEdit = () => {
       })
     );
   };
-  console.log({ blocks });
-
-  const [scrollTo, setScrollTo] = useState(0);
 
   return (
     <>
@@ -62,15 +63,16 @@ export const CreateAndEdit = () => {
             </Link>
           </Box>
           <Box className={classes.scrollBox}>
-            {Object.keys(blocks)?.map((block, index) => (
-              <Button
-                variant="outlined"
-                key={block}
-                onClick={() => setScrollTo(index)}
-              >
-                block No. {index + 1}
-              </Button>
-            ))}
+            {blocks &&
+              Object.keys(blocks)?.map((block, index) => (
+                <Button
+                  variant="outlined"
+                  key={block}
+                  onClick={() => setScrollTo(index)}
+                >
+                  block No. {index + 1}
+                </Button>
+              ))}
           </Box>
         </BasicCard>
 

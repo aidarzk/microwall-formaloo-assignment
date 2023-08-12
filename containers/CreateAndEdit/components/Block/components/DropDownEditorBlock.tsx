@@ -1,14 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
-import {
-  IconButton,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
-import FormControl from "@mui/material/FormControl";
+import { IconButton, Typography } from "@mui/material";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";

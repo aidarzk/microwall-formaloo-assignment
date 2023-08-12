@@ -2,9 +2,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { TextField } from "@/components/TextField/TextField";
 import { Typography } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import classes from "./index.module.scss";
 import { EditorDataModel } from "@/shared/constants/blockTypes";
 import { Calendar } from "@/components/Calendar/Calendar";
@@ -41,7 +38,7 @@ export const CalendarEditorBlock = ({
 
       <Box className={classes.takeInfoBox}>
         <Typography variant="body2" mb={1}>
-          please provide required information:
+          please provide information:
         </Typography>
         <TextField onChange={handleChange} label="title" value={title} />
       </Box>

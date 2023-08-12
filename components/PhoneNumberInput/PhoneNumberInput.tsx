@@ -4,7 +4,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 
 interface PhoneNumberInputProps {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>, newValue: string) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    newValue?: string
+  ) => void;
 }
 
 export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({

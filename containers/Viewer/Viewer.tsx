@@ -1,12 +1,13 @@
-import { Container, Grid, Typography } from "@mui/material";
-import BasicCard from "@/components/BasicCard/BasicCard";
 import Link from "next/link";
+//ui
+import { Container, Grid, Typography } from "@mui/material";
+import { IconEye } from "@tabler/icons-react";
+import classes from "./viewer.module.scss";
+//redux
 import { useAppSelector } from "@/redux/hooks";
 import { wallState } from "@/redux/features/wallsSlice";
+//shared
 import { routes } from "@/shared/constants/routes";
-
-import classes from "./viewer.module.scss";
-import { IconEye } from "@tabler/icons-react";
 
 export const Viewer = () => {
   const walls = useAppSelector(wallState);
